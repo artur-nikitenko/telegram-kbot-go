@@ -1,6 +1,6 @@
 module github.com/artur-nikitenko/telegram-kbot-go
 
-go 1.24.3
+go 1.24
 
 require (
 	github.com/spf13/cobra v1.9.1
