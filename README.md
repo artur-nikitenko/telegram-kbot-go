@@ -24,7 +24,18 @@ export TELE_TOKEN=123456:ABC-DEF...
 
 go build -ldflags "-X=github.com/artur-nikitenko/telegram-kbot-go/cmd.appVersion=v0.1.0"
 ```
+or
 
+```bash
+# Побудувати бінарник під Linux AMD64
+make build TARGETOS=linux TARGETARCH=amd64
+# Побудувати Docker-образ для AMD64
+make image TARGETARCH=amd64
+# Запушити його в DockerHub
+make push TARGETARCH=amd64
+# Чистка
+make clean
+```
 
 ## Команди у Telegram
 ```bash
