@@ -28,6 +28,6 @@ image:
 push:
 	docker push $(REGISTRY)/$(APP):$(VERSION)-$(TARGETARCH)
 
-# Clean
 clean:
 	rm -f telegram-kbot-go
+	docker rmi -f $(REGISTRY)/$(APP):$(VERSION)-$(TARGETARCH) || true
