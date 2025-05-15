@@ -34,7 +34,7 @@ make image TARGETARCH=amd64
 # Запушити його в DockerHub
 make push TARGETARCH=amd64
 # Чистка
-make clean
+make clean TARGETARCH=amd64
 ```
 
 ## Команди у Telegram
