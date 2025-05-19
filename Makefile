@@ -1,11 +1,12 @@
 APP=$(shell basename $(shell git rev-parse --show-toplevel))
-REGISTRY=nartur
-VERSION=$(shell git describe --tags --abbrev=0)-$(shell git rev-parse --short HEAD)
 USER=artur-nikitenko
+REGISTRY=ghcr.io/$(USER)
+VERSION=$(shell git describe --tags --abbrev=0)-$(shell git rev-parse --short HEAD)
 
-# default linux amd64)
+# default linux amd64
 TARGETOS?=linux
 TARGETARCH?=amd64
+PLATFORM_SUFFIX=$(TARGETARCH)
 
 format:
 	gofmt -s -w ./
@@ -19,15 +20,28 @@ test:
 get:
 	go mod tidy
 
-build:
-	CGO_ENABLED=0 GOOS=$(TARGETOS) GOARCH=$(TARGETARCH) go build -v -o telegram-kbot-go -ldflags "-X=github.com/$(USER)/$(APP)/cmd.appVersion=$(VERSION)" main.go
+linux:
+	GOOS=linux GOARCH=amd64 make build-binary TARGETOS=linux TARGETARCH=amd64
+
+arm:
+	GOOS=linux GOARCH=arm64 make build-binary TARGETOS=linux TARGETARCH=arm64
+
+macos:
+	GOOS=darwin GOARCH=amd64 make build-binary TARGETOS=darwin TARGETARCH=amd64
+
+windows:
+	GOOS=windows GOARCH=amd64 make build-binary TARGETOS=windows TARGETARCH=amd64
+
+build-binary:
+	CGO_ENABLED=0 GOOS=$(TARGETOS) GOARCH=$(TARGETARCH) go build -v -o build/$(TARGETOS)-$(TARGETARCH)/telegram-kbot-go -ldflags "-X=github.com/$(USER)/$(APP)/cmd.appVersion=$(VERSION)" main.go
+#	CGO_ENABLED=0 GOOS=$(TARGETOS) GOARCH=$(TARGETARCH) go build -v -o telegram-kbot-go -ldflags "-X=github.com/$(USER)/$(APP)/cmd.appVersion=$(VERSION)" main.go
 
 image:
-	docker build --build-arg VERSION=$(VERSION) -t $(REGISTRY)/$(APP):$(VERSION)-$(TARGETARCH) .
+	docker build --build-arg VERSION=$(VERSION) --platform=linux/$(TARGETARCH) -t $(REGISTRY)/$(APP):$(VERSION)-$(PLATFORM_SUFFIX) .
 
 push:
-	docker push $(REGISTRY)/$(APP):$(VERSION)-$(TARGETARCH)
+	docker push $(REGISTRY)/$(APP):$(VERSION)-$(PLATFORM_SUFFIX)
 
 clean:
-	rm -f telegram-kbot-go
-	docker rmi -f $(REGISTRY)/$(APP):$(VERSION)-$(TARGETARCH) || true
+	rm -rf build
+	docker rmi -f $(REGISTRY)/$(APP):$(VERSION)-$(PLATFORM_SUFFIX) || true

@@ -28,13 +28,16 @@ or
 
 ```bash
 # Побудувати бінарник під Linux AMD64
-make build TARGETOS=linux TARGETARCH=amd64
+make linux
+make arm
+make macos
+make windows
 # Побудувати Docker-образ для AMD64
-make image TARGETARCH=amd64
-# Запушити його в DockerHub
-make push TARGETARCH=amd64
+make image
+# Запушити його в ghcr.io
+make push
 # Чистка
-make clean TARGETARCH=amd64
+make clean
 ```
 
 ## Команди у Telegram
