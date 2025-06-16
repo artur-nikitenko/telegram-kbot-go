@@ -1,0 +1,7 @@
+image:
+  repository: nartur/telegram-kbot-go
+  tag: v1.1.1-bac8295
+  arch: amd64
+
+env:
+  TELE_TOKEN: ""
