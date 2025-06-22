@@ -74,11 +74,12 @@ jobs:
       - name: Update Helm chart values
         uses: mikefarah/yq@master
         with:
-          cmd: yq -i '
-            .image.tag = strenv(VERSION) |
-            .image.arch = strenv(TARGETARCH) |
-            .image.os = strenv(TARGETOS)
-          ' chart/values.yaml
+          cmd: |
+            yq -i '
+              .image.tag = strenv(VERSION) |
+              .image.arch = strenv(TARGETARCH) |
+              .image.os = strenv(TARGETOS)
+            ' chart/values.yaml
 
       - name: Commit Helm chart update
         run: |
