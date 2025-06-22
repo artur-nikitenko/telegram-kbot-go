@@ -28,7 +28,7 @@ serviceAccount:
 image:
   registry: ghcr.io
   repository: artur-nikitenko/telegram-kbot-go
-  tag: v1.1.2-90234e9
+  tag: v1.1.2-1014cfc
   os: linux
   arch: amd64
 env:
