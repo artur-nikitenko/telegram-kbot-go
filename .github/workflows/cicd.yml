@@ -4,6 +4,9 @@ on:
   push:
     branches: [ develop ]
 
+permissions:
+  contents: write
+
 env:
   TARGETARCH: amd64
   TARGETOS: linux
