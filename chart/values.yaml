@@ -3,7 +3,6 @@ autoscaling:
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
-
 ingress:
   enabled: false
   className: ""
@@ -14,27 +13,23 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
   tls: []
-
 service:
   type: ClusterIP
   port: 8080
-
 serviceAccount:
   create: true
   automount: true
   annotations: {}
   name: ""
-
-    #image:
-    #  repository: nartur/telegram-kbot-go
-    #  tag: v1.1.1-bac8295
-    #  arch: amd64
+  #image:
+  #  repository: nartur/telegram-kbot-go
+  #  tag: v1.1.1-bac8295
+  #  arch: amd64
 image:
   registry: ghcr.io
   repository: artur-nikitenko/telegram-kbot-go
-  tag: v1.1.1-140b389-linux-amd64
+  tag: v1.1.2-8e24490
   os: linux
   arch: amd64
-
 env:
   TELE_TOKEN: ""
