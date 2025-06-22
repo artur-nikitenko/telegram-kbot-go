@@ -28,8 +28,8 @@ serviceAccount:
 image:
   registry: ghcr.io
   repository: artur-nikitenko/telegram-kbot-go
-  tag: v1.1.2-8e24490
+  tag: v1.1.2-8e24490-amd64
   os: linux
   arch: amd64
 env:
-  TELE_TOKEN: ""
+  TELE_TOKEN: "792...87:A...._wGE0"
