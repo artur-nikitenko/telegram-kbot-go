@@ -58,7 +58,9 @@ jobs:
 
       - name: Set version
         run: |
-          VERSION=$(git describe --tags --abbrev=0)-$(git rev-parse --short HEAD)
+          #VERSION=$(git describe --tags --abbrev=0)-$(git rev-parse --short HEAD)
+          RAW_VERSION=$(git describe --tags --abbrev=0)-$(git rev-parse --short HEAD)
+          VERSION="${RAW_VERSION}-${TARGETOS}-${TARGETARCH}"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Login to GitHub Container Registry
