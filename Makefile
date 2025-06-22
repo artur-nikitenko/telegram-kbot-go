@@ -7,6 +7,7 @@ VERSION=$(shell git describe --tags --abbrev=0)-$(shell git rev-parse --short HE
 TARGETOS?=linux
 TARGETARCH?=amd64
 PLATFORM_SUFFIX=$(TARGETOS)-$(TARGETARCH)
+FULL_VERSION=$(VERSION)-$(PLATFORM_SUFFIX)
 
 format:
 	gofmt -s -w ./
@@ -37,10 +38,10 @@ build-binary:
 #	CGO_ENABLED=0 GOOS=$(TARGETOS) GOARCH=$(TARGETARCH) go build -v -o telegram-kbot-go -ldflags "-X=github.com/$(USER)/$(APP)/cmd.appVersion=$(VERSION)" main.go
 
 image:
-	docker build --build-arg VERSION=$(VERSION) --platform=linux/$(TARGETARCH) -t $(REGISTRY)/$(APP):$(VERSION)-$(PLATFORM_SUFFIX) .
+	docker build --build-arg VERSION=$(VERSION) --platform=linux/$(TARGETARCH) -t $(REGISTRY)/$(APP):$(FULL_VERSION) .
 
 push:
-	docker push $(REGISTRY)/$(APP):$(VERSION)-$(PLATFORM_SUFFIX)
+	docker push $(REGISTRY)/$(APP):$(FULL_VERSION)
 
 clean:
 	rm -rf build
