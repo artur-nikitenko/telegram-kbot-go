@@ -6,7 +6,7 @@ VERSION=$(shell git describe --tags --abbrev=0)-$(shell git rev-parse --short HE
 # default linux amd64
 TARGETOS?=linux
 TARGETARCH?=amd64
-PLATFORM_SUFFIX=$(TARGETARCH)
+PLATFORM_SUFFIX=$(TARGETOS)-$(TARGETARCH)
 
 format:
 	gofmt -s -w ./
