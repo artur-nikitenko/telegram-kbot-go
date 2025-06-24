@@ -21,10 +21,6 @@ serviceAccount:
   automount: true
   annotations: {}
   name: ""
-  #image:
-  #  repository: nartur/telegram-kbot-go
-  #  tag: v1.1.1-bac8295
-  #  arch: amd64
 image:
   registry: ghcr.io
   repository: artur-nikitenko/telegram-kbot-go
