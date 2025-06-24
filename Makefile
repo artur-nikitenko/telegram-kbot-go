@@ -37,9 +37,10 @@ build-binary:
 	CGO_ENABLED=0 GOOS=$(TARGETOS) GOARCH=$(TARGETARCH) go build -v -o build/$(TARGETOS)-$(TARGETARCH)/telegram-kbot-go -ldflags "-X=github.com/$(USER)/$(APP)/cmd.appVersion=$(VERSION)" main.go
 #	CGO_ENABLED=0 GOOS=$(TARGETOS) GOARCH=$(TARGETARCH) go build -v -o telegram-kbot-go -ldflags "-X=github.com/$(USER)/$(APP)/cmd.appVersion=$(VERSION)" main.go
 
+#image:
+#	docker build --build-arg VERSION=$(VERSION) --platform=linux/$(TARGETARCH) -t $(REGISTRY)/$(APP):$(FULL_VERSION) .
 image:
-	docker build --build-arg VERSION=$(VERSION) --platform=linux/$(TARGETARCH) -t $(REGISTRY)/$(APP):$(FULL_VERSION) .
-
+	docker build --build-arg VERSION=$(FULL_VERSION) --platform=linux/$(TARGETARCH) -t $(REGISTRY)/$(APP):$(FULL_VERSION) .
 push:
 	docker push $(REGISTRY)/$(APP):$(FULL_VERSION)
 
