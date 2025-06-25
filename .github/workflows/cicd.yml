@@ -86,7 +86,7 @@ jobs:
               .image.tag = strenv(BASE_VERSION) |
               .image.arch = strenv(TARGETARCH) |
               .image.os = strenv(TARGETOS)
-            ' chart/values.yaml
+            ' helm/values.yaml
 
       - name: Commit Helm chart update
         run: |
