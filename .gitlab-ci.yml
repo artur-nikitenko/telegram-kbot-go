@@ -1,0 +1,57 @@
+stages:
+  - lint
+  - test
+  - build
+  - image
+  - push
+
+# default values
+variables:
+  TARGETOS: "linux"
+  TARGETARCH: "amd64"
+  SKIP_LINT: "false"
+  SKIP_TESTS: "false"
+  CGO_ENABLED: "0"
+
+default:
+  image: golang:1.21
+  before_script:
+    - apt-get update && apt-get install -y make git
+    - make get
+
+lint:
+  stage: lint
+  script:
+    - |
+      if [ "$SKIP_LINT" = "true" ]; then
+        echo "SKIP_LINT=true — skipping linter"
+      else
+        go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+        make lint
+      fi
+
+test:
+  stage: test
+  script:
+    - |
+      if [ "$SKIP_TESTS" = "true" ]; then
+        echo "SKIP_TESTS=true — skipping tests"
+      else
+        make test
+      fi
+
+build:
+  stage: build
+  script:
+    - make $TARGETOS TARGETARCH=$TARGETARCH
+
+image:
+  stage: image
+  script:
+    - make image TARGETOS=$TARGETOS TARGETARCH=$TARGETARCH
+
+push:
+  stage: push
+  script:
+    - echo "$CI_JOB_TOKEN" | docker login ghcr.io -u gitlab-ci-token --password-stdin
+    - make push TARGETOS=$TARGETOS TARGETARCH=$TARGETARCH
