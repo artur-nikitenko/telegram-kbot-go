@@ -35,5 +35,7 @@ securityContext:
       - ALL
   seccompProfile:
     type: RuntimeDefault
+imagePullSecrets:
+  - name: ghcr-secret
 env:
   TELE_TOKEN: "792...87:A...._wGE0"
