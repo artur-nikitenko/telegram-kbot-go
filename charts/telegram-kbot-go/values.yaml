@@ -27,6 +27,8 @@ image:
   tag: v1.1.2-3b61af2
   os: linux
   arch: amd64
+podSecurityContext:
+  runAsNonRoot: false
 securityContext:
   allowPrivilegeEscalation: false
   runAsNonRoot: false
