@@ -27,5 +27,13 @@ image:
   tag: v1.1.2-3b61af2
   os: linux
   arch: amd64
+securityContext:
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault
 env:
   TELE_TOKEN: "792...87:A...._wGE0"
