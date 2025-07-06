@@ -60,8 +60,6 @@ jobs:
           VERSION=${TAG}-$(git rev-parse --short HEAD)
           PLATFORM_SUFFIX=linux-amd64
           echo "VERSION=${VERSION}-${PLATFORM_SUFFIX}" >> $GITHUB_ENV
-      - name: Debug version
-        run: echo "Docker tag: ${{ env.VERSION }}"
       - name: Build Docker image
         run: make image TARGETOS=linux TARGETARCH=amd64
 
