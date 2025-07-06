@@ -1,62 +1,65 @@
+name: CI/CD Pipeline
+
 on:
   push:
-    branches: [ feature/add-gitleaks-hook ]
+    branches:
+      - feature/add-gitleaks-hook
 
-stages:
-  - lint
-  - test
-  - build
-  - image
-  - push
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-# default values
-variables:
-  TARGETOS: "linux"
-  TARGETARCH: "amd64"
-  SKIP_LINT: "false"
-  SKIP_TESTS: "false"
-  CGO_ENABLED: "0"
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.24
 
-default:
-  image: golang:1.21
-  before_script:
-    - apt-get update && apt-get install -y make git
-    - make get
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y make git
 
-lint:
-  stage: lint
-  script:
-    - |
-      if [ "$SKIP_LINT" = "true" ]; then
-        echo "SKIP_LINT=true — skipping linter"
-      else
-        go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-        make lint
-      fi
+      - name: Install golangci-lint
+        run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
-test:
-  stage: test
-  script:
-    - |
-      if [ "$SKIP_TESTS" = "true" ]; then
-        echo "SKIP_TESTS=true — skipping tests"
-      else
-        make test
-      fi
+      - name: Run linter
+        run: make lint
 
-build:
-  stage: build
-  script:
-    - make $TARGETOS TARGETARCH=$TARGETARCH
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.24
+      - name: Run tests
+        run: make test
 
-image:
-  stage: image
-  script:
-    - make image TARGETOS=$TARGETOS TARGETARCH=$TARGETARCH
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build binary
+        run: make linux TARGETARCH=amd64
 
-push:
-  stage: push
-  script:
-    - echo "$CI_JOB_TOKEN" | docker login ghcr.io -u gitlab-ci-token --password-stdin
-    - make push TARGETOS=$TARGETOS TARGETARCH=$TARGETARCH
+  image:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: make image TARGETOS=linux TARGETARCH=amd64
 
+  push:
+    runs-on: ubuntu-latest
+    needs: image
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Push Docker image
+        run: make push TARGETOS=linux TARGETARCH=amd64
