@@ -56,10 +56,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Set version
         run: |
-          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          VERSION=${TAG}-$(git rev-parse --short HEAD)
-          PLATFORM_SUFFIX=linux-amd64
-          echo "VERSION=${VERSION}-${PLATFORM_SUFFIX}" >> $GITHUB_ENV
+      i   BASE_VERSION=$(git describe --tags --abbrev=0)-$(git rev-parse --short HEAD)
+          PLATFORM_SUFFIX=${{ env.TARGETOS }}-${{ env.TARGETARCH }}
+          FULL_VERSION=${BASE_VERSION}-${PLATFORM_SUFFIX}
+          echo "BASE_VERSION=$BASE_VERSION" >> $GITHUB_ENV
+          echo "PLATFORM_SUFFIX=$PLATFORM_SUFFIX" >> $GITHUB_ENV
+          echo "VERSION=$FULL_VERSION" >> $GITHUB_ENV
       - name: Build Docker image
         run: make image TARGETOS=linux TARGETARCH=amd64
 
