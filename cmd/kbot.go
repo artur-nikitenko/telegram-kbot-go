@@ -56,7 +56,7 @@ Usage:
 			default:
 				return m.Send("🤖 I don't understand. Try: 'hello', 'help', or 'ping'")
 			}
-			return err
+		//	return err
 		})
 
 		kbot.Start()
