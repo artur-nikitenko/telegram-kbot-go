@@ -2,6 +2,8 @@ APP=$(shell basename $(shell git rev-parse --show-toplevel))
 USER=artur-nikitenko
 REGISTRY=ghcr.io/$(USER)
 VERSION=$(shell git describe --tags --abbrev=0)-$(shell git rev-parse --short HEAD)
+TELE_TOKEN="123456789:AAAbbbCccDddEEEfffGGGhhhIIIjjjkkkLLL"
+
 
 # default linux amd64
 TARGETOS?=linux
